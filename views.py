@@ -34,6 +34,12 @@ def index():
 def test(param1, param2):
     return param1
 
+@error(404)
+@memorize
+def error404(code):
+    """ TODO """
+    pass
+
 def main():
     run_wsgi_app(default_app())
 
