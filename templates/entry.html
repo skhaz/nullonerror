@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ entry.title }} - {{ blog.name }}{% endblock %}
+
+{% block content %}
+  <div class="title">
+    <h1>{{ entry.title }}</h1>
+    <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
+  </div>
+  <p>{{ entry.content }}</p>
+  <div>
+    <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
+
+    <!-- tags -->
+    <div class="pull-right">
+    <span class="label"></span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div id="disqus_thread"></div>
+{% endblock %}
+
+{% set modules = ['prettify'] %}
+{% block ready %}
+  window.disqus_shortname = '{{ blog.disqus_shortname }}'
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+      $(window).unbind('scroll');
+      $.ajax({
+        type : "GET",
+        url : ('http://' + disqus_shortname + '.disqus.com/embed.js'),
+        dataType : "script",
+        cache : true
+      })
+    }
+  })
+{% endblock %}
+
