@@ -3,12 +3,10 @@ from bottle import default_app, route, request, error
 from google.appengine.ext.webapp.util import run_wsgi_app
 from memorize import memorize
 
-
-
 @route('/')
 @memorize
 def index():
-    return "ok"
+    pass
 
 @route('/test/:param1/:param2')
 @memorize
