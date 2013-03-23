@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-
-import urllib
-import json
-import settings
 from jinja2 import nodes
 from jinja2.ext import Extension
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
-from utils import build_url
 
 class ImgurExtension(Extension):
     tags = set(['imgur'])
@@ -33,17 +28,22 @@ class ImgurExtension(Extension):
 
     @classmethod
     def _render_tag(self, args):
-        filename = args["src"]
+        import urllib
+        from settings import IMGUR_KEY, IMGUR_API_UPLOAD
+        from utils import build_url
+
+        filename = args.get('src')
         alt = args.get('alt', '')
-        params = urllib.urlencode({"key" : settings.IMGUR_KEY, "image" : build_url(filename)})
-        result = urlfetch.fetch("http://api.imgur.com/2/upload.json", method=urlfetch.POST, payload=params)
+        params = urllib.urlencode({'key' : IMGUR_KEY, 'image' : build_url(filename)})
+        result = urlfetch.fetch(IMGUR_API_UPLOAD, method=urlfetch.POST, payload=params)
 
         if result.status_code == 200:
-            data = json.loads(result.content)
+            from json import loads
+            data = loads(result.content)
             upload = data["upload"]
             image = upload["image"]
             links = upload["links"]
-            html = '<div class="centered"><a href="{href}"><img class="img-polaroid" width="{width}" height="{height}" src="{src}" alt="{alt}" /></a></div>'
+            html = '<div class="centered"><img class="img-polaroid" width="{width}" height="{height}" src="{src}" alt="{alt}" /></div>'
 
-            return html.format(href=links["imgur_page"], width=image["width"], height=image["height"], src=links["original"], alt=alt)
+            return html.format(width=image["width"], height=image["height"], src=links["original"], alt=alt)
 

@@ -8,7 +8,8 @@
     <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>
     <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
 </div>
-  <p>{{ entry.content }}</p>
+<p>{{ entry.content }}</p>
+<hr>
 {% endfor %}
 {% endif %}
 {% endblock %}
