@@ -20,6 +20,7 @@ jinja2 = Environment(loader=template_loader, extensions=extensions)
 jinja2.globals.update(blog=settings.blog)
 
 def render(*args, **kwargs):
+    """ black magic """
     import inspect
     callframe = inspect.getouterframes(inspect.currentframe(), 2)
     template = jinja2.get_template('{}.html'.format(callframe[1][3]))
@@ -83,7 +84,6 @@ def hook():
     finally:
         from google.appengine.api import memcache
         memcache.flush_all()
-
 
 @route('/about')
 @memorize
