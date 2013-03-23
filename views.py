@@ -29,13 +29,12 @@ def render(*args, **kwargs):
 @route('/')
 @memorize
 def index():
-    entries = db.Query(Entry).order('-published').fetch(limit=25)
-    return render(entries=entries)
+    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
 
 @route('/entry/:slug')
 @memorize
 def entry(slug):
-    entry = db.Query(Entry).filter("slug =", slug).get()
+    entry = db.Query(Entry).filter('slug =', slug).get()
     if not entry:
         from bottle import HTTPError
         raise HTTPError(404)
@@ -46,47 +45,45 @@ def entry(slug):
 def hook():
     try:
         import json
-        payload = json.loads(self.request.get("payload"))
+        from bottle import request
+        payload = json.loads(request.forms.get('payload'))
     except:
-        logging.error("Failed to parse JSON")
+        logging.error('Failed to parse JSON')
     else:
-        for commit in payload["commits"]:
+        for commit in payload['commits']:
             for action, files  in commit.iteritems():
-                if action in ["added", "modified"]:
+                if action in ['added', 'modified']:
                     for filename in files:
-                        self.add_or_update_entry(filename)
-                elif action in ["removed"]:
+                        basename, extension = os.path.splitext(filename)
+                        if extension in ['.entry', '.meta']:
+                            from google.appengine.api import urlfetch
+                            from utils import build_url
+                            result = urlfetch.fetch(url = build_url(filename))
+                            if result.status_code == 200:
+                                entry = Entry.get_or_insert(basename)
+                                if extension.endswith('.entry'):
+                                    entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
+                                else:
+                                    try:
+                                        import yaml
+                                        meta = yaml.load(result.content)
+                                    except:
+                                        logging.error('Failed to parse YAML')
+                                    else:
+                                        entry.title = meta['name']
+                                entry.slug = basename
+                                entry.put()
+                            else:
+                                logging.error('failed to fetch %s' % filename)
+                elif action in ['removed']:
                     for filename in files:
-                        self.delete_entry(filename)
+                        basename, extension = os.path.splitext(filename)
+                        entry = Entry.get_by_key_name(basename)
+                        if entry: entry.delete()
     finally:
+        from google.appengine.api import memcache
         memcache.flush_all()
 
-    def add_or_update_entry(self, filename):
-        basename, extension = os.path.splitext(filename)
-        if extension in [".entry", ".meta"]:
-            result = urlfetch.fetch(url = build_url(filename))
-            if result.status_code == 200:
-                entry = Entry.get_or_insert(basename)
-                if extension.endswith(".entry"):
-                    entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
-                else:
-                    try:
-                        import yaml
-                        meta = yaml.load(result.content)
-                    except:
-                        logging.error("Failed to parse YAML")
-                    else:
-                        entry.title = meta["name"]
-
-                entry.slug = basename
-                entry.put()
-            else:
-                logging.error("failed to fetch %s" % filename)
-
-    def delete_entry(self, filename):
-        basename, extension = os.path.splitext(filename)
-        entry = Entry.get_by_key_name(basename)
-        if entry: entry.delete()
 
 @route('/about')
 @memorize
@@ -100,15 +97,21 @@ def code():
 
 @route('/keepalive')
 def keepalive():
+    """ Good morni... Wake up app engine! """
     pass
 
-# TODO entry
-# TODO feed/rss
-
 @route('/archive')
-#@memorize
+@memorize
 def archive():
-    return render()
+    return render(entries=db.Query(Entry).order('-published'))
+
+@route('/feed')
+@memorize
+def feed():
+    """
+    TODO
+    """
+    pass
 
 @error(404)
 @memorize
@@ -118,6 +121,6 @@ def error404(code):
 def main():
     run_wsgi_app(default_app())
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
