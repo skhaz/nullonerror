@@ -43,6 +43,44 @@ def entry(slug):
     else:
         return render(entry=entry)
 
+@route('/about')
+@memorize
+def about():
+    return render()
+
+@route('/code')
+@memorize
+def code():
+    return render()
+
+@route('/archive')
+@memorize
+def archive():
+    return render(entries=db.Query(Entry).order('-published'))
+
+@route('/category')
+@memorize
+def category():
+    return "category"
+
+@route('/category/:category')
+@memorize
+def category(category):
+    return category
+    #return render(entries=db.Query(Entry)...
+    pass
+
+@route('/feed')
+@memorize
+def feed():
+    """ TODO fetch all """
+    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
+
+@error(404)
+@memorize
+def error404(code):
+    return render()
+
 @post('/hook')
 def hook():
     try:
@@ -65,7 +103,7 @@ def hook():
                                 entry = Entry.get_or_insert(basename)
                                 if extension.endswith('.entry'):
                                     import cgi
-                                    entry.content = jinja2.from_string(cgi.escape(result.content.decode('utf-8'))).render()
+                                    entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
                                 else:
                                     try:
                                         import yaml
@@ -86,37 +124,6 @@ def hook():
     finally:
         from google.appengine.api import memcache
         memcache.flush_all()
-
-@route('/about')
-@memorize
-def about():
-    return render()
-
-@route('/code')
-@memorize
-def code():
-    return render()
-
-@route('/archive')
-@memorize
-def archive():
-    return render(entries=db.Query(Entry).order('-published'))
-
-@route('/category/:category')
-def category(category):
-    #return render(entries=db.Query(Entry)...
-    pass
-
-@route('/feed')
-@memorize
-def feed():
-    """ TODO fetch all """
-    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
-
-@error(404)
-@memorize
-def error404(code):
-    return render()
 
 def main():
     run_wsgi_app(default_app())
