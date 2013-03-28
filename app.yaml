@@ -5,7 +5,7 @@ api_version: 1
 threadsafe: off
 
 builtins:
-- appstats: off
+- appstats: on
 
 libraries:
 - name: jinja2

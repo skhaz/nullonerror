@@ -1,5 +1,0 @@
-cron:
-- description: Keep alive
-  url: /keepalive
-  schedule: every 3 hours
-

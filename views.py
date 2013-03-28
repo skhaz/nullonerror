@@ -23,13 +23,14 @@ def render(*args, **kwargs):
     """ black magic """
     import inspect
     callframe = inspect.getouterframes(inspect.currentframe(), 2)
-    template = jinja2.get_template('{}.html'.format(callframe[1][3]))
+    template = jinja2.get_template('{}.template'.format(callframe[1][3]))
 
     return template.render(*args, **kwargs)
 
 @route('/')
 @memorize
 def index():
+    """ TODO pagination """
     return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
 
 @route('/entry/:slug')
@@ -63,7 +64,8 @@ def hook():
                             if result.status_code == 200:
                                 entry = Entry.get_or_insert(basename)
                                 if extension.endswith('.entry'):
-                                    entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
+                                    import cgi
+                                    entry.content = jinja2.from_string(cgi.escape(result.content.decode('utf-8'))).render()
                                 else:
                                     try:
                                         import yaml
@@ -95,23 +97,21 @@ def about():
 def code():
     return render()
 
-@route('/keepalive')
-def keepalive():
-    """ Good morni... Wake up app engine! """
-    pass
-
 @route('/archive')
 @memorize
 def archive():
     return render(entries=db.Query(Entry).order('-published'))
 
+@route('/category/:category')
+def category(category):
+    #return render(entries=db.Query(Entry)...
+    pass
+
 @route('/feed')
 @memorize
 def feed():
-    """
-    TODO
-    """
-    pass
+    """ TODO fetch all """
+    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
 
 @error(404)
 @memorize

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout.template" %}
 
 {% block title %}{{ entry.title }} - {{ blog.name }}{% endblock %}
 
