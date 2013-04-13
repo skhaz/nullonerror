@@ -1,3 +1,20 @@
+{% extends "layout.template" %}
 
-{% extends "index.template" %}
+{% block content %}
+
+{% if entries %}
+{% for entry in entries %}
+  <div class="title">
+    <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>
+    <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
+</div>
+<p>{{ entry.content }}</p>
+<hr>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% set modules = ['prettify'] %}
+{% block ready %}
+{% endblock %}
 

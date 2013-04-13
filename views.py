@@ -5,7 +5,7 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from bottle import default_app, route, post, request, error
+from bottle import default_app, route, post, request, error, debug
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 import settings
@@ -13,18 +13,16 @@ from imgur import ImgurExtension
 from memorize import memorize
 from models import Entry
 
-template_loader = FileSystemLoader([os.path.join(os.path.dirname(__file__), settings.TEMPLATE_DIR)])
-extensions = [ImgurExtension]
+jinja2 = Environment(
+        loader=FileSystemLoader([os.path.join(os.path.dirname(__file__), settings.TEMPLATE_DIR)]),
+        extensions=[ImgurExtension])
 
-jinja2 = Environment(loader=template_loader, extensions=extensions)
 jinja2.globals.update(blog=settings.blog)
 
 def render(*args, **kwargs):
-    """ black magic """
     import inspect
     callframe = inspect.getouterframes(inspect.currentframe(), 2)
     template = jinja2.get_template('{}.template'.format(callframe[1][3]))
-
     return template.render(*args, **kwargs)
 
 @route('/')
@@ -61,20 +59,24 @@ def archive():
 @route('/category')
 @memorize
 def category():
-    return "category"
+    return "TODO list all"
 
 @route('/category/:category')
 @memorize
 def category(category):
-    return category
-    #return render(entries=db.Query(Entry)...
-    pass
+    query = db.Query(Entry)
+    query.filter('categories', category)
+    query.order('-published')
+    query.fetch(limit=25)
+    return render(entries=query)
 
 @route('/feed')
 @memorize
 def feed():
-    """ TODO fetch all """
-    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
+    query = db.Query(Entry)
+    query.order('-published')
+    query.fetch(limit=25)
+    return render(entries=query)
 
 @error(404)
 @memorize
@@ -112,6 +114,8 @@ def hook():
                                         logging.error('Failed to parse YAML')
                                     else:
                                         entry.title = meta['name']
+                                        entry.categories = meta['categories']
+                                        entry.published = meta['published']
                                 entry.slug = basename
                                 entry.put()
                             else:
@@ -121,6 +125,8 @@ def hook():
                         basename, extension = os.path.splitext(filename)
                         entry = Entry.get_by_key_name(basename)
                         if entry: entry.delete()
+                else:
+                    pass
     finally:
         from google.appengine.api import memcache
         memcache.flush_all()
