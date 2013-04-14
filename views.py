@@ -56,7 +56,7 @@ def code():
 def archive():
     return render(entries=db.Query(Entry).order('-published'))
 
-@route('/category')
+@route('/categories')
 @memorize
 def category():
     return "TODO list all"
@@ -104,7 +104,6 @@ def hook():
                             if result.status_code == 200:
                                 entry = Entry.get_or_insert(basename)
                                 if extension.endswith('.entry'):
-                                    import cgi
                                     entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
                                 else:
                                     try:
@@ -113,13 +112,14 @@ def hook():
                                     except:
                                         logging.error('Failed to parse YAML')
                                     else:
-                                        entry.title = meta['name']
+                                        entry.title = meta['title']
                                         entry.categories = meta['categories']
                                         entry.published = meta['published']
                                 entry.slug = basename
                                 entry.put()
                             else:
                                 logging.error('failed to fetch %s' % filename)
+
                 elif action in ['removed']:
                     for filename in files:
                         basename, extension = os.path.splitext(filename)
