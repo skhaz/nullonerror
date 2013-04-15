@@ -11,11 +11,11 @@
   <div>
     <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
 
-  <div class="pull-right">
-  {% for category in entry.categories %}
-    <span class="badge badge-info"><a href="/category/{{ category }}">{{ category }}</a></span>
-  {% endfor %}
-  </div>
+    <div class="pull-right">
+    {% for category in entry.categories %}
+      <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
+    {% endfor %}
+    </div>
   </div>
 
   <hr>

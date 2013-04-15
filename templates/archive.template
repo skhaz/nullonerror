@@ -2,7 +2,7 @@
 
 {% block content %}
   {% if entries %}
-  <ul>
+  <ul class="nav nav-pills nav-stacked">
     {% for entry in entries %}
     <li>
       <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>

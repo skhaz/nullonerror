@@ -67,8 +67,12 @@ def category(category):
     query = db.Query(Entry)
     query.filter('categories', category)
     query.order('-published')
-    query.fetch(limit=25)
-    return render(entries=query)
+    result = query.fetch(limit=25)
+    if not result:
+        from bottle import HTTPError
+        raise HTTPError(404)
+
+    return render(entries=result)
 
 @route('/feed')
 @memorize
