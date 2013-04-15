@@ -15,9 +15,3 @@ indexes:
   - name: categories
   - name: published
     direction: desc
-
-- kind: Entry
-  properties:
-  - name: category
-  - name: published
-    direction: desc
