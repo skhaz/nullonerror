@@ -77,21 +77,13 @@
         exports: '$'
       },
 
-      'jquery.ga': {
-        deps: ['jquery'],
-        exports: '$.ga',
-        init: function() {
-          $.ga.load("{{ blog.ga_tracking_code }}")
-        }
-      },
-
       'bootstrap': {
         deps: ['jquery']
       },
 
       'prettify': {
-		init: function () {
-			prettyPrint()
+        init: function () {
+          prettyPrint()
         }
       },
 
@@ -110,6 +102,18 @@
 
     callback: function() {
       $(function() {
+        $.ajax({
+          type : "GET",
+          url: (document.location.protocol == "https:" ? "https://ssl" : "http://www") + '.google-analytics.com/ga.js',
+          dataType : "script",
+          data: null,
+          cache : true,
+          success: function() {
+            var tracker = _gat._getTracker('{{ blog.ga_tracking_code }}')
+            tracker.trackPageview();
+          }
+        })
+
         {% block ready %}
         {% endblock %}
       })
