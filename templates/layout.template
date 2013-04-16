@@ -93,8 +93,8 @@
     },
 
     deps: [
-      'jquery.ga',
       'bootstrap',
+
       {% for module in modules %}
       '{{ module }}',
       {% endfor %}
@@ -110,7 +110,7 @@
           cache : true,
           success: function() {
             var tracker = _gat._getTracker('{{ blog.ga_tracking_code }}')
-            tracker.trackPageview();
+            tracker._trackPageview();
           }
         })
 
