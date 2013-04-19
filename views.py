@@ -29,7 +29,6 @@ def render(*args, **kwargs):
 @route('/')
 @memorize
 def index():
-    """ TODO pagination """
     return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
 
 @route('/entry/:slug')
@@ -60,7 +59,7 @@ def archive():
 @route('/categories')
 @memorize
 def category():
-    return "TODO list all"
+    return render()
 
 @route('/category/:category')
 @memorize
