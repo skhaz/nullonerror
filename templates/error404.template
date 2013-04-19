@@ -1,13 +1,13 @@
 {% extends "layout.template" %}
 
 {% block content %}
-  <div class="alert alert-error">
-    <h4>404 Not found!</h4>
-    Our team are working hard to fix it as soon as possible!
-  </div>
-  <div class="centered">
-    <img src="#" id="404image" class="img-polaroid" alt="404" />
-  </div>
+<div class="alert alert-error">
+  <h4>404 Not found!</h4>
+  Our team are working hard to fix it as soon as possible!
+</div>
+<div class="centered">
+  <img src="#" id="404image" class="img-polaroid" alt="404" />
+</div>
 {% endblock %}
 
 {% set modules = ['jquery.raptorize'] %}

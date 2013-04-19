@@ -1,26 +1,25 @@
 {% extends "layout.template" %}
 
 {% block content %}
-
 {% if entries %}
 {% for entry in entries %}
   <div class="title">
     <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>
     <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
-</div>
-<p>{{ entry.content }}</p>
-  <div>
-    <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
-    <div class="pull-right">
-    {% for category in entry.categories %}
-      <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
-    {% endfor %}
-    </div>
   </div>
-  {% if not loop.last %}
-    <hr>
-  {% endif %}
-{% endfor %}
+  <p>{{ entry.content }}</p>
+    <div>
+      <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
+      <div class="pull-right">
+      {% for category in entry.categories %}
+        <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
+      {% endfor %}
+      </div>
+    </div>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
 {% endif %}
 {% endblock %}
 

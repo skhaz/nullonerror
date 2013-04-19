@@ -1,15 +1,15 @@
 {% extends "layout.template" %}
 
 {% block content %}
-  {% if entries %}
+{% if entries %}
   <ul class="nav nav-pills nav-stacked">
-    {% for entry in entries %}
+  {% for entry in entries %}
     <li>
       <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>
       <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
     </li>
-    {% endfor %}
+  {% endfor %}
   </ul>
-  {% endif %}
+{% endif %}
 {% endblock %}
 
