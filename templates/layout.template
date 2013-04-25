@@ -54,6 +54,12 @@
   </div>
   <script type="text/javascript">
   // <![CDATA[
+  var re = /http:\/\/(www\.)?(\w+)\.appspot.com\/?(.*?)/gi
+  if (re.test(location.href)) {
+    // Redirect to new domain
+    location.href = location.href.replace(re, "http://www.$2.org/$3")
+  }
+
   String.prototype.format = function() {
     var str = this
     var i = 0
