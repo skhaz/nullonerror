@@ -10,7 +10,15 @@
     <link href="/static/css/custom.css" rel="stylesheet">
     <link href="/static/css/tomorrow.css" rel="stylesheet">
     <link href="{{ blog.feed_url }}" type="application/rss+xml" rel="alternate" />
-    {% block header %}{% endblock %}
+	{% block header %}{% endblock %}
+    <script type="text/javascript">
+    // <![CDATA[
+    var re = /http:\/\/(www\.)?(\w+)\.appspot.com\/?(.*?)/gi
+    if (re.test(location.href))
+      location.href = location.href.replace(re, "http://www.$2.org/$3")
+
+    // ]]>
+    </script>
   </head>
   <body>
   <a href="https://github.com/skhaz/nullonerror"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/static/img/forkme.png" alt="Fork me on GitHub" /></a>
@@ -54,12 +62,6 @@
   </div>
   <script type="text/javascript">
   // <![CDATA[
-  var re = /http:\/\/(www\.)?(\w+)\.appspot.com\/?(.*?)/gi
-  if (re.test(location.href)) {
-    // Redirect to new domain
-    location.href = location.href.replace(re, "http://www.$2.org/$3")
-  }
-
   String.prototype.format = function() {
     var str = this
     var i = 0
