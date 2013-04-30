@@ -3,6 +3,7 @@
 {% block title %}{{ entry.title }} - {{ blog.name }}{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
   <div class="title">
     <h1>{{ entry.title }}</h1>
   </div>
@@ -16,26 +17,24 @@
     {% endfor %}
     </div>
   </div>
+</div>
 
-  <hr>
+<hr>
 
-  <div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
 {% endblock %}
 
 {% set modules = ['prettify'] %}
 {% block ready %}
-  window.disqus_shortname = '{{ blog.disqus_shortname }}'
+window.disqus_shortname = '{{ blog.disqus_shortname }}'
 
-  $(window).scroll(function() {
-    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-      $(window).unbind('scroll');
-      $.ajax({
-        type : "GET",
-        url : ('http://' + disqus_shortname + '.disqus.com/embed.js'),
-        dataType : "script",
-        cache : true
-      })
-    }
+setTimeout(function() {
+  $.ajax({
+    type : "GET",
+    url : ('http://' + disqus_shortname + '.disqus.com/embed.js'),
+    dataType : "script",
+    cache : true
   })
+}, 1000)
 {% endblock %}
 
