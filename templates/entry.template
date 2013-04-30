@@ -3,7 +3,6 @@
 {% block title %}{{ entry.title }} - {{ blog.name }}{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
   <div class="title">
     <h1>{{ entry.title }}</h1>
   </div>
@@ -17,11 +16,10 @@
     {% endfor %}
     </div>
   </div>
-</div>
 
-<hr>
+  <hr>
 
-<div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 {% endblock %}
 
 {% set modules = ['prettify'] %}

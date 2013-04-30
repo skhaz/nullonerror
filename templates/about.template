@@ -1,8 +1,8 @@
 {% extends "layout.template" %}
 
 {% block content %}
-Hacker de mini-game, escovador de bits nas horas vagas
-
+Hacker de mini-game, escovador de bits nas horas vagas e curioso de plantão // TODO: melhorar isso
+<br />
 <p>&uarr; &uarr; &darr; &darr; &larr; &rarr; &larr; &rarr; B A</p>
 {% endblock %}
 
