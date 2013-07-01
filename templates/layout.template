@@ -107,7 +107,7 @@
             agent.show()
             agent.speak(' ↑ ↑ ↓ ↓ ← → ← → B A')
             window.agent = agent
-			window.setInterval(function() { agent.animate() }, 1500)
+            window.setInterval(function() { agent.animate() }, 1500)
           });
         }
       },
@@ -123,15 +123,18 @@
 
     callback: function() {
       $(function() {
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', '{{ blog.ga_tracking_code }}']);
+        _gaq.push(['_trackPageview']);
+
         $.ajax({
           type : "GET",
-          url: (document.location.protocol == "https:" ? "https://ssl" : "http://www") + '.google-analytics.com/ga.js',
+          url: 'http://www.google-analytics.com/ga.js',
           dataType : "script",
           data: null,
           cache : true,
           success: function() {
-            var tracker = _gat._getTracker('{{ blog.ga_tracking_code }}')
-            tracker._trackPageview();
+            // 0x90
           }
         })
 

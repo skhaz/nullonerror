@@ -5,8 +5,13 @@
   <ul class="nav nav-pills nav-stacked">
   {% for entry in entries %}
     <li>
-      <h1><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h1>
-      <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
+      <h2><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h2>
+      <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
+      <div class="pull-right">
+      {% for category in entry.categories %}
+        <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
+      {% endfor %}
+    </div>
     </li>
   {% endfor %}
   </ul>

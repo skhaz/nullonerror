@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="title">
-    <h1>{{ entry.title }}</h1>
+    <h2>{{ entry.title }}</h2>
   </div>
   <p>{{ entry.content }}</p>
   <div>
@@ -33,6 +33,6 @@ setTimeout(function() {
     dataType : "script",
     cache : true
   })
-}, 1000)
+}, 500)
 {% endblock %}
 
