@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from google.appengine.api import memcache
 
 class memorize():
