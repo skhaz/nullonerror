@@ -23,6 +23,9 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /stats.*
+  script: google.appengine.ext.appstats.ui.app
+
 - url: /.*
   script: views.py
 
