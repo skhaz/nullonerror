@@ -9,7 +9,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/tomorrow.css" />
-    <link rel="alternate" type="application/rss+xml" href="{{ blog.feed_url }}" />
+    <link rel="alternate" type="appl.ication/rss+xml" href="{{ blog.feed_url }}" />
+	<link href="{{ blog.gplus_url }}" rel="publisher" />
     <script type="text/javascript">
     // <![CDATA[
     var re = /http:\/\/(www\.)?(\w+)\.appspot.com\/?(.*?)/gi;
