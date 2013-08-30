@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ blog.name }}<title>
+  <title>{{ blog.name|escape }}</title>
   <link href="{{ blog.url }}" />
   <link href="{{ blog.feed_url }}" rel="self" />
   {% for entry in entries %}
   <entry>
-    <title>{{ entry.title }}</title>
+    <title>{{ entry.title|escape }}</title>
     <author>
-      <name>{{ blog.author }}</name>
+      <name>{{ blog.author|escape }}</name>
       <uri>{{ blog.url }}</uri>
     </author>
     <published>{{ entry.published }}</published>
-    <link href="{{ blog.url }}/entry/{{ entry.slug }}"/>
+    <link href="{{ blog.url }}/entry/{{ entry.slug }}" />
     <content type="html">{{ entry.content|escape }}</content>
   </entry>
   {% endfor %}

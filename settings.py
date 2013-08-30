@@ -16,7 +16,7 @@ github = {
 blog = {
     'name': 'NULL on error',
     'author': "Rodrigo Delduca",
-    'gplus_url': "https://plus.google.com/106348190802171574832",
+    'google_plus': "106348190802171574832",
     'url': 'http://www.nullonerror.org',
     'quote': 'flipping bits whilst updating pixels',
     'feed_url': 'http://feeds.feedburner.com/NullOnError',
