@@ -100,6 +100,7 @@ def hook():
             for action, files  in commit.iteritems():
                 if action in ['added', 'modified']:
                     for filename in files:
+                        # XXX Add to task queue
                         basename, extension = os.path.splitext(filename)
                         if extension in ['.entry', '.meta']:
                             from google.appengine.api import urlfetch

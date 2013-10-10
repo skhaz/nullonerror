@@ -10,12 +10,8 @@
 </div>
 {% endblock %}
 
-{% set modules = ['jquery.raptorize'] %}
+{% set modules = ['jquery.raptorize', 'sprintf'] %}
 {% block ready %}
-/*
- * LOLcats!
- */
-
-$("#404image").attr('src', '/static/img/cat_{}.jpg'.format((Math.random() * 11) >> 0))
+$("#404image").attr('src', sprintf('/static/img/cat_%d.jpg', (Math.random() * 11) >> 0));
 {% endblock %}
 

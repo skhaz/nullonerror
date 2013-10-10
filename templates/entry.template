@@ -24,15 +24,13 @@
 
 {% set modules = ['prettify'] %}
 {% block ready %}
-window.disqus_shortname = '{{ blog.disqus_shortname }}'
-
-setTimeout(function() {
+$.when(
   $.ajax({
     type : "GET",
-    url : ('http://' + disqus_shortname + '.disqus.com/embed.js'),
+    url : ('http://{{ blog.disqus_shortname }}.disqus.com/embed.js'),
     dataType : "script",
     cache : true
   })
-}, 500)
+);
 {% endblock %}
 

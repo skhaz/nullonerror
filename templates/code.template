@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block ready %}
+/*
 $.getJSON('https://api.github.com/users/skhaz/repos?callback=?', function(result) {
   $('.info').hide()
   $.each(result.data, function(i, repo) {
@@ -18,5 +19,6 @@ $.getJSON('https://api.github.com/users/skhaz/repos?callback=?', function(result
     }
   })
 })
+*/
 {% endblock %}
 

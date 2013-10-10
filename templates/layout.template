@@ -13,26 +13,6 @@
     <link href="https://plus.google.com/{{ blog.google_plus }}" rel="publisher" />
     <script type="text/javascript">
     // <![CDATA[
-    var re = /http:\/\/(www\.)?(\w+)\.appspot.com\/?(.*?)/gi;
-    if (re.test(location.href)) {
-      location.href = location.href.replace(re, "http://www.$2.org/$3");
-    }
-
-    String.prototype.format = function() {
-      var str = this
-      var i = 0
-      var len = arguments.length
-      var matches = str.match(/{}/g)
-      if (!matches || matches.length !== len) { return '' }
-      while (i < len) {
-        value = arguments[i]
-        str = str.replace(/{}/, value ? value : '')
-        i++
-      }
-
-      return str
-    }
-
     var require = {
       baseUrl: "/static/js",
 
@@ -58,12 +38,12 @@
         'clippy': {
           deps: ['jquery'],
           init: function() {
-            clippy.BASE_PATH = '/static/agents/'
+            clippy.BASE_PATH = '/static/agents/';
             clippy.load('Clippy', function(agent) {
-              agent.show()
-              agent.speak(' ↑ ↑ ↓ ↓ ← → ← → B A')
-              window.agent = agent
-              window.setInterval(function() { agent.animate() }, 1500)
+              agent.show();
+              agent.speak(' ↑ ↑ ↓ ↓ ← → ← → B A');
+              window.agent = agent;
+              window.setInterval(function() { agent.animate() }, 2000);
             });
           }
         },
@@ -91,11 +71,11 @@
             cache : true,
             success: function() {
             }
-          })
+          });
 
           {% block ready %}
           {% endblock %}
-        })
+        });
       }
     }
     // ]]>
