@@ -6,13 +6,16 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from bottle import default_app, route, post, request, error, debug
+import bottle
+from bottle import run, route, post, request, error, debug
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 import settings
 from imgur import ImgurExtension
 from memorize import memorize
 from models import Entry
+
+app = bottle.app()
 
 jinja2 = Environment(
         loader=FileSystemLoader([os.path.join(os.path.dirname(__file__), settings.TEMPLATE_DIR)]),
@@ -21,9 +24,8 @@ jinja2 = Environment(
 jinja2.globals.update(blog=settings.blog)
 
 def render(*args, **kwargs):
-    import inspect
-    callframe = inspect.getouterframes(inspect.currentframe(), 2)
-    template = jinja2.get_template('{}.template'.format(callframe[1][3]))
+    from inspect import getframeinfo, currentframe
+    template = jinja2.get_template('{}.template'.format(getframeinfo(currentframe().f_back)[2]))
     return template.render(*args, **kwargs)
 
 @route('/')
@@ -135,10 +137,4 @@ def hook():
     finally:
         from google.appengine.api import memcache
         memcache.flush_all()
-
-def main():
-    run_wsgi_app(default_app())
-
-if __name__ == '__main__':
-    main()
 
