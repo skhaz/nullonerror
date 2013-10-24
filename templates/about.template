@@ -5,23 +5,114 @@
 {% block content %}
 <p>&uarr; &uarr; &darr; &darr; &larr; &rarr; &larr; &rarr; B A</p>
 
+<canvas id="myChart" width="400" height="400"></canvas>
 
-<div id="count"></div>
-{% endblock %}
-{% set modules = ['jquery.raptorize', 'clippy'] %}
-{% block ready %}
-$('body').raptorize({
-  "enterOn": "konami-code"
-})
 
-$(document).ready(function() {
-$.getJSON("http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=skhaz&period=3month&api_key=9d4575d5d89f06cb29659fed03693254&format=json", function(data) {
-  $.each(data.toptracks.track, function(index, track) {
-    var html = "<p>" + track.name + "</p>"
-    $('#count').append(html)
+<script type="text/javascript">
+/*
+		google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(function() {
+
+
+var BASE = "http://ws.audioscrobbler.com/2.0/?api_key=9d4575d5d89f06cb29659fed03693254&format=json&";
+
+$.when(
+  $.ajax(BASE + "method=user.gettoptracks&user=skhaz&period=12month&limit=12")
+  .done(function(data) {
+        var dataTable = new google.visualization.DataTable();
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+ dataTable.addColumn('string', 'Track name');
+   dataTable.addColumn('number', 'Play count');
+
+    $.each(data.toptracks.track, function(index, track) {
+        dataTable.addRow([track.artist.name + " - " + track.name, parseInt(track.playcount)]);
+    })
+
+        chart.draw(dataTable);
   })
-})
-})
+  /*
+     ,
+  $.ajax(BASE + "method=user.gettopalbums&user=skhaz")
+  .done(function(data) {
+    // console.debug(data);
+
+
+});
+*/
+</script>
+
+{% endblock %}
+
+// set modules = ['jquery.raptorize', 'clippy'] %}
+{% set modules = ['chart', 'jquery.raptorize'] %}
+
+{% block ready %}
+/*
+$('body').raptorize({
+  "enterOn": "konami-code";
+});
+*/
+var data = [
+	{
+		label: "DFC",
+		value: 15,
+		labelFontSize : '14',
+	},
+
+
+	{
+		label: "Imminent Attack",
+		value: 30,
+		labelFontSize : '14',
+	},
+	{
+		label: "Torture Squad",
+		value : 50,
+		labelFontSize : '14',
+
+	},
+	{
+		label: "Krisiun",
+		value : 100,
+		labelFontSize : '14',
+	}
+];
+
+var context = document.getElementById("myChart").getContext("2d");
+
+new Chart(context).Pie(data);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -29,4 +120,3 @@ $.getJSON("http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=skhaz
 
 
 {% endblock %}
-

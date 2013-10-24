@@ -8,10 +8,13 @@ libraries:
 - name: jinja2
   version: "2.6"
 
+builtins:
+- deferred: on
+
 handlers:
-- url: /favicon\.ico
+- url: /favicon.ico
   static_files: static/img/favicon.ico
-  upload: static/img/favicon\.ico
+  upload: static/img/favicon.ico
 
 - url: /robots.txt
   static_files: static/robots.txt
@@ -21,4 +24,4 @@ handlers:
   static_dir: static
 
 - url: /.*
-  script: views.app
+  script: main.app

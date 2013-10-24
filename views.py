@@ -1,32 +1,23 @@
 # -*- coding: utf-8 -*-
-
-import os
 import logging
 
-from google.appengine.ext import db
-from google.appengine.ext.webapp.util import run_wsgi_app
-
-import bottle
-from bottle import run, route, post, request, error, debug
-from jinja2 import Environment, FileSystemLoader, TemplateNotFound
+from google.appengine.ext import db, deferred
+from bottle import app, run, route, post, request, error
 
 import settings
-from imgur import ImgurExtension
+from tasks import worker
 from memorize import memorize
 from models import Entry
 
-app = bottle.app()
-
-jinja2 = Environment(
-        loader=FileSystemLoader([os.path.join(os.path.dirname(__file__), settings.TEMPLATE_DIR)]),
-        extensions=[ImgurExtension])
-
-jinja2.globals.update(blog=settings.blog)
-
 def render(*args, **kwargs):
+    from os.path import join, dirname
     from inspect import getframeinfo, currentframe
-    template = jinja2.get_template('{}.template'.format(getframeinfo(currentframe().f_back)[2]))
-    return template.render(*args, **kwargs)
+    from jinja2 import Environment, FileSystemLoader
+
+    jinja2 = Environment(
+            loader=FileSystemLoader([join(dirname(__file__), settings.TEMPLATE_DIR)]))
+    jinja2.globals.update(blog=settings.blog)
+    return jinja2.get_template('%s.template' % getframeinfo(currentframe().f_back)[2]).render(*args, **kwargs)
 
 @route('/')
 @memorize
@@ -44,7 +35,7 @@ def entry(slug):
         return render(entry=entry)
 
 @route('/about')
-@memorize
+# @memorize
 def about():
     return render()
 
@@ -91,50 +82,5 @@ def error404(code):
 
 @post('/hook')
 def hook():
-    try:
-        import json
-        from bottle import request
-        payload = json.loads(request.forms.get('payload'))
-    except:
-        logging.error('Failed to parse JSON')
-    else:
-        for commit in payload['commits']:
-            for action, files  in commit.iteritems():
-                if action in ['added', 'modified']:
-                    for filename in files:
-                        # XXX Add to task queue
-                        basename, extension = os.path.splitext(filename)
-                        if extension in ['.entry', '.meta']:
-                            from google.appengine.api import urlfetch
-                            from utils import build_url
-                            result = urlfetch.fetch(url = build_url(filename))
-                            if result.status_code == 200:
-                                entry = Entry.get_or_insert(basename)
-                                if extension.endswith('.entry'):
-                                    entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
-                                else:
-                                    try:
-                                        import yaml
-                                        meta = yaml.load(result.content)
-                                    except:
-                                        logging.error('Failed to parse YAML')
-                                    else:
-                                        entry.title = meta['title']
-                                        entry.categories = meta['categories']
-                                        entry.published = meta['published']
-                                entry.slug = basename
-                                entry.put()
-                            else:
-                                logging.error('failed to fetch %s' % filename)
-
-                elif action in ['removed']:
-                    for filename in files:
-                        basename, extension = os.path.splitext(filename)
-                        entry = Entry.get_by_key_name(basename)
-                        if entry: entry.delete()
-                else:
-                    pass
-    finally:
-        from google.appengine.api import memcache
-        memcache.flush_all()
+    deferred.defer(worker, request.forms.get('payload'))
 

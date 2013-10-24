@@ -35,6 +35,8 @@
           deps: ['jquery']
         },
 
+        'chart' : { },
+
         'clippy': {
           deps: ['jquery'],
           init: function() {
