@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-import logging
 
 from google.appengine.ext import db, deferred
 from bottle import app, run, route, post, request, error
 
+import logging
 import settings
+
 from tasks import github_postreceive
 from memorize import memorize
 from models import Entry
@@ -35,7 +36,7 @@ def entry(slug):
         return render(entry=entry)
 
 @route('/about')
-# @memorize
+@memorize
 def about():
     return render()
 
@@ -72,8 +73,12 @@ def category(category):
 def feed():
     query = db.Query(Entry)
     query.order('-published')
-    query.fetch(limit=25)
-    return render(entries=query)
+    result = query.fetch(limit=25)
+    if not result:
+        from bottle import HTTPError
+        raise HTTPError(404)
+
+    return render(entries=result)
 
 @error(404)
 @memorize
