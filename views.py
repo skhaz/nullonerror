@@ -5,7 +5,7 @@ from google.appengine.ext import db, deferred
 from bottle import app, run, route, post, request, error
 
 import settings
-from tasks import worker
+from tasks import github_postreceive
 from memorize import memorize
 from models import Entry
 
@@ -82,5 +82,5 @@ def error404(code):
 
 @post('/hook')
 def hook():
-    deferred.defer(worker, request.forms.get('payload'))
+    deferred.defer(github_postreceive, request.forms.get('payload'))
 
