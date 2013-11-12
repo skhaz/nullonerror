@@ -15,6 +15,7 @@ def render(*args, **kwargs):
     from inspect import getframeinfo, currentframe
     from jinja2 import Environment, FileSystemLoader
 
+    # black magic
     jinja2 = Environment(
             loader=FileSystemLoader([join(dirname(__file__), settings.TEMPLATE_DIR)]))
     jinja2.globals.update(blog=settings.blog)
@@ -88,4 +89,6 @@ def error404(code):
 @post('/hook')
 def hook():
     deferred.defer(github_postreceive, request.forms.get('payload'))
+    
+    return 'many thanks github! <3'
 
