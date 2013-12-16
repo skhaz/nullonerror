@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="title">
-    <h2>{{ entry.title }}</h2>
+    <h4>{{ entry.title }}</h2>
   </div>
   <p>{{ entry.content }}</p>
   <div>

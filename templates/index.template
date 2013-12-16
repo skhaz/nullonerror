@@ -21,7 +21,7 @@ function coderwall(username) {
   $.getJSON('http://coderwall.com/' + username + '.json?callback=?', function(result) {
     $.each(result.data.badges, function(index, item) {
       console.log(item.name);
-	});
+    });
   });
 }
 
