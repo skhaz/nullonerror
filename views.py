@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from google.appengine.ext import db, deferred
 from bottle import app, run, route, post, request, error
 
@@ -15,7 +14,6 @@ def render(*args, **kwargs):
     from inspect import getframeinfo, currentframe
     from jinja2 import Environment, FileSystemLoader
 
-    # black magic
     jinja2 = Environment(
             loader=FileSystemLoader([join(dirname(__file__), settings.TEMPLATE_DIR)]))
     jinja2.globals.update(blog=settings.blog)
@@ -24,7 +22,7 @@ def render(*args, **kwargs):
 @route('/')
 @memorize
 def index():
-    return render(entries=db.Query(Entry).order('-published').fetch(limit=25))
+    return render(entries=db.Query(Entry).order('-published').fetch(limit=0x29A))
 
 @route('/entry/:slug')
 @memorize
@@ -45,11 +43,6 @@ def about():
 @memorize
 def code():
     return render()
-
-@route('/archive')
-@memorize
-def archive():
-    return render(entries=db.Query(Entry).order('-published'))
 
 @route('/categories')
 @memorize
@@ -89,6 +82,4 @@ def error404(code):
 @post('/hook')
 def hook():
     deferred.defer(github_postreceive, request.forms.get('payload'))
-    
-    return 'many thanks github! <3'
 

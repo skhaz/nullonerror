@@ -1,29 +1,48 @@
 {% extends "layout.template" %}
-
 {% block content %}
 {% if entries %}
-{% for entry in entries %}
-  <div class="title">
-    <h2><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h2>
-    <div class="time">{{ entry.published.strftime('%B %d, %Y') }}</div>
-  </div>
-  <p>{{ entry.content }}</p>
-    <div>
+  <ul class="nav nav-pills nav-stacked">
+  {% for entry in entries %}
+    <li>
+      <h3><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h3>
       <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
       <div class="pull-right">
       {% for category in entry.categories %}
         <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
       {% endfor %}
-      </div>
     </div>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
+    </li>
   {% endfor %}
+  </ul>
 {% endif %}
 {% endblock %}
-
-{% set modules = ['prettify'] %}
 {% block ready %}
+function coderwall(username) {
+  $.getJSON('http://coderwall.com/' + username + '.json?callback=?', function(result) {
+    $.each(result.data.badges, function(index, item) {
+      console.log(item.name);
+	});
+  });
+}
+
+function github(username) {
+  $.getJSON('https://api.github.com/users/' + username + '/repos?callback=?', function(result) {
+    $.each(result.data, function(index, item) {
+      console.log(item.name);
+	});
+  });
+}
+
+function lastfm(username) {
+  $.getJSON('', function(result) {
+  });
+}
+
+var username = 'skhaz';
+
+$.when(coderwall(username), github(username), lastfm(username))
+.then(function() {
+  // done
+});
 {% endblock %}
 

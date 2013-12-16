@@ -13,8 +13,16 @@
     <link href="https://plus.google.com/{{ blog.google_plus }}" rel="publisher" />
     <script type="text/javascript">
     // <![CDATA[
+    var BASE_URL = '/static/js'
     var require = {
-      baseUrl: "/static/js",
+      baseUrl: BASE_URL,
+
+      paths : {
+        jquery: [
+          '//code.jquery.com/jquery-2.0.3.min',
+          BASE_URL + '/jquery',
+        ]
+      },
 
       shim: {
         'jquery': {
@@ -35,7 +43,13 @@
           deps: ['jquery']
         },
 
-        'chart' : { },
+		'jquery.flot': {
+          deps: ['jquery']
+		},
+
+		'jquery.flot.pie': {
+          deps: ['jquery.flot']
+		},
 
         'clippy': {
           deps: ['jquery'],
@@ -100,7 +114,6 @@
         <ul class="nav">
           <li class="active"><a href="/">Home</a></li>
           <li><a href="/code">Code</a></li>
-          <li><a href="/archive">Archive</a></li>
           <li><a href="/categories">Categories</a></li>
           <li><a href="/about">About</a></li>
         </ul>
@@ -119,7 +132,7 @@
       &nbsp;
       Copyleft 2013
       &nbsp;
-      <a href="https://plus.google.com/{{ blog.google_plus }}?rel=author">{{ blog.author }}</a>
+      <a rel="author" href="/about">{{ blog.author }}</a>
     </p>
   </div>
   </div>
