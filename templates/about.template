@@ -4,6 +4,8 @@
 {% endblock %}
 {% block content %}
 
+<div id="holder" style="width: 640px;height:240;"></div>
+
 <a rel="me" href="https://plus.google.com/{{ blog.google_plus }}?rel=author">{{ blog.author }}</a>
 
 <p>&uarr; &uarr; &darr; &darr; &larr; &rarr; &larr; &rarr; B A</p>
@@ -12,7 +14,5 @@
 {% set modules = ['jquery.raptorize', 'clippy'] %}
 
 {% block ready %}
-$('body').raptorize({
-  "enterOn": "konami-code";
-});
+
 {% endblock %}

@@ -17,6 +17,7 @@
 {% endif %}
 {% endblock %}
 {% block ready %}
+
 function coderwall(username) {
   $.getJSON('http://coderwall.com/' + username + '.json?callback=?', function(result) {
     $.each(result.data.badges, function(index, item) {
@@ -34,15 +35,27 @@ function github(username) {
 }
 
 function lastfm(username) {
-  $.getJSON('', function(result) {
+  var API_KEY = '9d4575d5d89f06cb29659fed03693254';
+  var params = {
+    method: 'user.gettopartists',
+    format: 'json',
+    period: '7day'
+    api_key: API_KEY,
+    user: username
+  };
+
+  $.getJSON('http://ws.audioscrobbler.com/2.0/?' + $.param(params)), function(result) {
+    $.each(result.topartists.artist, function(index, artist) {
+      console.log(artist.name + ' ' + artist.playcount);
+    });
   });
 }
 
 var username = 'skhaz';
 
-$.when(coderwall(username), github(username), lastfm(username))
-.then(function() {
+// $.when(coderwall(username), github(username), lastfm(username))
+// .then(function() {
   // done
-});
+// });
 {% endblock %}
 

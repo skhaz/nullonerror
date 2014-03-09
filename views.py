@@ -20,9 +20,9 @@ def render(*args, **kwargs):
     return jinja2.get_template('%s.template' % getframeinfo(currentframe().f_back)[2]).render(*args, **kwargs)
 
 @route('/')
-@memorize
+# @memorize
 def index():
-    return render(entries=db.Query(Entry).order('-published').fetch(limit=0x29A))
+    return render(entries=db.Query(Entry).order('-published').run())
 
 @route('/entry/:slug')
 @memorize
@@ -35,7 +35,7 @@ def entry(slug):
         return render(entry=entry)
 
 @route('/about')
-@memorize
+#@memorize
 def about():
     return render()
 
@@ -55,7 +55,7 @@ def category(category):
     query = db.Query(Entry)
     query.filter('categories', category)
     query.order('-published')
-    result = query.fetch(limit=25)
+    result = query.run()
     if not result:
         from bottle import HTTPError
         raise HTTPError(404)
@@ -67,12 +67,7 @@ def category(category):
 def feed():
     query = db.Query(Entry)
     query.order('-published')
-    result = query.fetch(limit=25)
-    if not result:
-        from bottle import HTTPError
-        raise HTTPError(404)
-
-    return render(entries=result)
+    return render(entries=query.run())
 
 @error(404)
 @memorize

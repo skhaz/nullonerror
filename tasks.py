@@ -11,6 +11,9 @@ from imgur import ImgurExtension
 from models import Entry
 from utils import build_url
 
+import yaml
+import logging
+
 jinja2 = Environment(extensions=[ImgurExtension])
 
 def insert_or_update_entry(filename):
@@ -24,8 +27,8 @@ def insert_or_update_entry(filename):
             else:
                 try:
                     meta = yaml.load(result.content)
-                except:
-                    logging.error('Failed to parse YAML')
+                except Exception as e:
+                    logging.error('Failed to parse YAML: %s' % e)
                 else:
                     entry.title = meta['title']
                     entry.categories = meta['categories']
