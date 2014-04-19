@@ -25,7 +25,7 @@ def index():
     return render(entries=db.Query(Entry).order('-published').run())
 
 @route('/entry/:slug')
-@memorize
+# @memorize
 def entry(slug):
     entry = db.Query(Entry).filter('slug =', slug).get()
     if not entry:
@@ -35,25 +35,20 @@ def entry(slug):
         return render(entry=entry)
 
 @route('/about')
-#@memorize
+# @memorize
 def about():
     return render()
 
-@route('/code')
-@memorize
-def code():
+@route('/tags')
+# @memorize
+def tags():
     return render()
 
-@route('/categories')
-@memorize
-def category():
-    return render()
-
-@route('/category/:category')
-@memorize
-def category(category):
+@route('/tag/:tag')
+# @memorize
+def tag(tag):
     query = db.Query(Entry)
-    query.filter('categories', category)
+    query.filter('tag', tag)
     query.order('-published')
     result = query.run()
     if not result:
@@ -63,14 +58,14 @@ def category(category):
     return render(entries=result)
 
 @route('/feed')
-@memorize
+# @memorize
 def feed():
     query = db.Query(Entry)
     query.order('-published')
     return render(entries=query.run())
 
 @error(404)
-@memorize
+# @memorize
 def error404(code):
     return render()
 

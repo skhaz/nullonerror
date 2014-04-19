@@ -4,11 +4,11 @@
   <ul class="nav nav-pills nav-stacked">
   {% for entry in entries %}
     <li>
-      <h3><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h3>
-      <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span>
+      <h4><a href="/entry/{{ entry.slug }}">{{ entry.title }}</a></h4>
+      <!-- <span class="badge badge-important">Posted {{ entry.published.strftime('%B %d, %Y') }}</span> -->
       <div class="pull-right">
-      {% for category in entry.categories %}
-        <a href="/category/{{ category }}"><span class="badge badge-info">{{ category }}</span></a>
+      {% for tag in entry.tags %}
+        <a href="/tag/{{ tag }}"><span class="badge badge-info">#{{ tag }}</span></a>
       {% endfor %}
     </div>
     </li>
@@ -16,9 +16,11 @@
   </ul>
 {% endif %}
 {% endblock %}
-{% block ready %}
 
-function coderwall(username) {
+{% block ready %}
+var username = 'skhaz';
+
+function coderwall() {
   $.getJSON('http://coderwall.com/' + username + '.json?callback=?', function(result) {
     $.each(result.data.badges, function(index, item) {
       console.log(item.name);
@@ -26,7 +28,7 @@ function coderwall(username) {
   });
 }
 
-function github(username) {
+function github() {
   $.getJSON('https://api.github.com/users/' + username + '/repos?callback=?', function(result) {
     $.each(result.data, function(index, item) {
       console.log(item.name);
@@ -34,28 +36,26 @@ function github(username) {
   });
 }
 
-function lastfm(username) {
+function lastfm() {
   var API_KEY = '9d4575d5d89f06cb29659fed03693254';
   var params = {
     method: 'user.gettopartists',
     format: 'json',
-    period: '7day'
+    period: '7day',
     api_key: API_KEY,
     user: username
   };
 
-  $.getJSON('http://ws.audioscrobbler.com/2.0/?' + $.param(params)), function(result) {
+  $.getJSON('http://ws.audioscrobbler.com/2.0/?' + $.param(params), function(result) {
     $.each(result.topartists.artist, function(index, artist) {
       console.log(artist.name + ' ' + artist.playcount);
     });
   });
 }
 
-var username = 'skhaz';
-
-// $.when(coderwall(username), github(username), lastfm(username))
-// .then(function() {
-  // done
-// });
+$.when(coderwall(), github(), lastfm())
+  .then(function() {
+    // done
+  });
 {% endblock %}
 

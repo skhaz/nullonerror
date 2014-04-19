@@ -43,7 +43,7 @@ class ImgurExtension(Extension):
             upload = data["upload"]
             image = upload["image"]
             links = upload["links"]
-            html = '<div class="centered"><img class="img-polaroid" width="{width}" height="{height}" src="{src}" alt="{alt}" /></div>'
+            html = '<div class="centered"><img class="img-thumbnail center-block" width="{width}" height="{height}" src="{src}" alt="{alt}" /></div>'
 
             return html.format(width=image["width"], height=image["height"], src=links["original"], alt=alt)
 
