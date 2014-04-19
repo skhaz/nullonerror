@@ -18,11 +18,11 @@ jinja2 = Environment(extensions=[ImgurExtension])
 
 def insert_or_update_entry(filename):
     basename, extension = splitext(filename)
-    if extension in ['.entry', '.meta']:
+    if extension in ['.markdown', '.meta']:
         result = urlfetch.fetch(url = build_url(filename))
         if result.status_code == 200:
             entry = Entry.get_or_insert(basename)
-            if extension.endswith('.entry'):
+            if extension.endswith('.markdown'):
                 entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
             else:
                 try:
@@ -31,7 +31,7 @@ def insert_or_update_entry(filename):
                     logging.error('Failed to parse YAML: %s' % e)
                 else:
                     entry.title = meta['title']
-                    entry.categories = meta['categories']
+                    entry.tags = meta['tags']
                     entry.published = meta['published']
             entry.slug = basename
             entry.put()

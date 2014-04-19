@@ -1,18 +1,4 @@
 {% extends "layout.template" %}
-{% block header %}
-<link rel="stylesheet" type="text/css" href="/static/css/clippy.css" media="all" />
-{% endblock %}
 {% block content %}
-
-<div id="holder" style="width: 640px;height:240;"></div>
-
-<a rel="me" href="https://plus.google.com/{{ blog.google_plus }}?rel=author">{{ blog.author }}</a>
-
-<p>&uarr; &uarr; &darr; &darr; &larr; &rarr; &larr; &rarr; B A</p>
 {% endblock %}
 
-{% set modules = ['jquery.raptorize', 'clippy'] %}
-
-{% block ready %}
-
-{% endblock %}
