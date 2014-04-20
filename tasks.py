@@ -10,7 +10,6 @@ from jinja2 import Environment
 from imgur import ImgurExtension
 from models import Entry
 from utils import build_url
-
 import yaml
 import logging
 
@@ -23,7 +22,9 @@ def insert_or_update_entry(filename):
         if result.status_code == 200:
             entry = Entry.get_or_insert(basename)
             if extension.endswith('.markdown'):
-                entry.content = jinja2.from_string(result.content.decode('utf-8')).render()
+                html = markdown(result.content.decode('utf-8'))
+                if html:
+                    entry.content = jinja2.from_string(html).render()
             else:
                 try:
                     meta = yaml.load(result.content)

@@ -1,0 +1,3 @@
+[submodule "3rdparty/markdown"]
+	path = 3rdparty/markdown
+	url = https://github.com/waylan/Python-Markdown.git
