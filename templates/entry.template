@@ -34,17 +34,11 @@ $.ajax({
   success: function() { prettyPrint() },
 });
 
-
-$.ajax({
-  type : "GET",
-  dataType: "script",
-  url : ('http://{{ blog.disqus_shortname }}.disqus.com/embed.js'),
-});
-
-
-
-
-
+var element = document.createElement('script');
+element.type = 'text/javascript';
+element.async = true;
+element.src = '//{{ blog.disqus_shortname }}.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(element);
 
 {% endblock %}
 
