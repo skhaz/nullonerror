@@ -2,6 +2,10 @@
 
 {% block title %}{{ entry.title }} - {{ blog.name }}{% endblock %}
 
+{% block header %}
+<link rel="stylesheet" href="/static/css/tomorrow.css" />
+{% endblock %}
+
 {% block content %}
   <div class="title">
     <h4>{{ entry.title }}</h2>
@@ -22,11 +26,30 @@
 {% endblock %}
 
 {% block ready %}
+
+$.ajax({
+  type: "GET",
+  url: '//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js',
+  dataType: "script",
+  success: function() { prettyPrint() },
+});
+
+
 $.ajax({
   type : "GET",
+  dataType: "script",
   url : ('http://{{ blog.disqus_shortname }}.disqus.com/embed.js'),
-  dataType : "script",
-  cache : true
 });
+
+
+
+
+
+
 {% endblock %}
 
+{% block footer %}
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script> -->
+
+
+{% endblock %}

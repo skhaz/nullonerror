@@ -52,10 +52,11 @@ function lastfm() {
     });
   });
 }
-
+/*
 $.when(coderwall(), github(), lastfm())
   .then(function() {
     // done
   });
+*/
 {% endblock %}
 
