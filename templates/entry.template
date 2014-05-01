@@ -26,7 +26,6 @@
 {% endblock %}
 
 {% block ready %}
-
 $.ajax({
   type: "GET",
   url: '//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js',
@@ -38,12 +37,7 @@ var element = document.createElement('script');
 element.type = 'text/javascript';
 element.async = true;
 element.src = '//{{ blog.disqus_shortname }}.disqus.com/embed.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(element);
-
+var body = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]
+body.appendChild(element);
 {% endblock %}
 
-{% block footer %}
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script> -->
-
-
-{% endblock %}

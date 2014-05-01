@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from google.appengine.ext import db, deferred
-from bottle import app, run, route, post, request, error
+from bottle import Bottle
 
 import logging
 import settings
@@ -8,6 +8,14 @@ import settings
 from tasks import github_postreceive
 from memorize import memorize
 from models import Entry
+
+import sys, os
+
+from bottle import debug
+
+
+app = Bottle()
+debug(True)
 
 def render(*args, **kwargs):
     from os.path import join, dirname
@@ -19,12 +27,12 @@ def render(*args, **kwargs):
     jinja2.globals.update(blog=settings.blog)
     return jinja2.get_template('%s.template' % getframeinfo(currentframe().f_back)[2]).render(*args, **kwargs)
 
-@route('/')
+@app.route('/')
 # @memorize
 def index():
     return render(entries=db.Query(Entry).order('-published').run())
 
-@route('/entry/:slug')
+@app.route('/entry/:slug')
 # @memorize
 def entry(slug):
     entry = db.Query(Entry).filter('slug =', slug).get()
@@ -34,17 +42,17 @@ def entry(slug):
     else:
         return render(entry=entry)
 
-@route('/about')
+@app.route('/about')
 # @memorize
 def about():
     return render()
 
-@route('/tags')
+@app.route('/tags')
 # @memorize
 def tags():
     return render()
 
-@route('/tag/:tag')
+@app.route('/tag/:tag')
 # @memorize
 def tag(tag):
     query = db.Query(Entry)
@@ -57,19 +65,22 @@ def tag(tag):
 
     return render(entries=result)
 
-@route('/feed')
+@app.route('/feed')
 # @memorize
 def feed():
     query = db.Query(Entry)
     query.order('-published')
     return render(entries=query.run())
 
-@error(404)
+@app.error(404)
 # @memorize
 def error404(code):
     return render()
 
-@post('/hook')
+@app.post('/hook')
 def hook():
-    deferred.defer(github_postreceive, request.forms.get('payload'))
+    from bottle import request
+    deferred.defer(
+            github_postreceive,
+            request.forms.get('payload'))
 

@@ -12,8 +12,10 @@ from models import Entry
 from utils import build_url
 import yaml
 import logging
+import sys
+import os
 
-jinja2 = Environment(extensions=[ImgurExtension])
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '3rdparty/markdown2'))
 
 def insert_or_update_entry(filename):
     basename, extension = splitext(filename)
@@ -22,14 +24,16 @@ def insert_or_update_entry(filename):
         if result.status_code == 200:
             entry = Entry.get_or_insert(basename)
             if extension.endswith('.markdown'):
-                html = markdown(result.content.decode('utf-8'))
+                import markdown2
+                html = markdown2.markdown(result.content.decode('utf-8'))
                 if html:
+                    jinja2 = Environment(extensions=[ImgurExtension])
                     entry.content = jinja2.from_string(html).render()
             else:
                 try:
                     meta = yaml.load(result.content)
-                except Exception as e:
-                    logging.error('Failed to parse YAML: %s' % e)
+                except Exception as ex:
+                    logging.error('Failed to parse YAML: %s' % ex)
                 else:
                     entry.title = meta['title']
                     entry.tags = meta['tags']
