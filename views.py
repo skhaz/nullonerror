@@ -56,7 +56,7 @@ def tags():
 # @memorize
 def tag(tag):
     query = db.Query(Entry)
-    query.filter('tag', tag)
+    query.filter('tags', tag)
     query.order('-published')
     result = query.run()
     if not result:
